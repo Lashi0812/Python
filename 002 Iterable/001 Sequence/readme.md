@@ -134,13 +134,13 @@ l.__imul__(2)
 ## `__rmul__`
 now the calling object is integer and the argument is sequence type.
 since , the integer class don't implement this functionality, raise the type error, the python try to call 
-```l.__rmul__(2)```
+```(l).__rmul__(2)```
 ```python
 l = [1,2,3,4]
 2 * l
 
 # equivalent way
-l.__rmul__(2)
+(1).__rmul__(2)
 ```
 
 ## `__setitem__`
