@@ -136,3 +136,29 @@ we use the `del` keyword to delete element in the sequence
 3. inplace operator work for mutable sequence and object is mutated.
 4. inplace operator work for immutable sequence and object don't mutated will produce the new object.
 
+# Comprehension
+1. Comprehension have their *own local scope* - just like a function.
+2. ```rhs=[i**2 for i range(10)]``` and ```sq=rhs```
+3. when we complied the rhs :Python create temporary function that used to evaluate the comprehension
+    ```python
+    def temp():
+        new_list = []   
+        for i in range(10):
+            new_list.append(i**2)
+        return new_list
+    ```
+4. When the line execute : Execute the temps and store the returned object in memory and finally `point sq to that object`
+
+## Scope
+1. they can access the global variable
+    ```python
+    num = 100
+    sq = [i**2 for i range(num)]   
+    ```
+2. they can access the nonlocal scope.
+    ```python
+    def my_fnc(num):
+        sq = [i**2 for i range(num)]   
+    ```
+
+
