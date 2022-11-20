@@ -1,3 +1,28 @@
+<!-- TOC -->
+* [What is Sequence?](#what-is-sequence)
+* [Builtin sequence Types](#builtin-sequence-types)
+* [Other sequence type in Collection package](#other-sequence-type-in-collection-package)
+* [Homogenous and Heterogeneous Sequence](#homogenous-and-heterogeneous-sequence)
+* [Iterable vs Sequence](#iterable-vs-sequence)
+* [List vs Tuple](#list-vs-tuple)
+  * [Creating](#creating)
+  * [Coping](#coping)
+  * [Storing](#storing)
+* [Custom Sequence](#custom-sequence)
+  * [`__getitem__`](#__getitem__)
+  * [`__add__`](#__add__)
+  * [`__iadd`](#__iadd)
+  * [`__mul__`](#__mul__)
+  * [`__imul__`](#__imul__)
+  * [`__rmul__`](#__rmul__)
+  * [`__setitem__`](#__setitem__)
+  * [`__contains__`](#__contains__)
+  * [`__delitem__`](#__delitem__)
+* [Inplace concatenation and repetition](#inplace-concatenation-and-repetition)
+* [Comprehension](#comprehension)
+  * [Scope](#scope)
+<!-- TOC -->
+
 # What is Sequence?
 1. sequence of element with *positional ordering*
 2. indexing start from 0
