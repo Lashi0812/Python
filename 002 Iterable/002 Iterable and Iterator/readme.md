@@ -1,3 +1,25 @@
+<!-- TOC -->
+* [Iterating Sequence](#iterating-sequence)
+* [Iterable](#iterable)
+  * [concept of next](#concept-of-next)
+  * [building the iterable](#building-the-iterable)
+    * [Finite container](#finite-container)
+    * [`__next__`](#__next__)
+* [Iterator](#iterator)
+  * [Handle loop issue](#handle-loop-issue)
+    * [Iterator Protocol](#iterator-protocol)
+    * [How Python does?](#how-python-does)
+* [Iterator and Iterables](#iterator-and-iterables)
+  * [Iterator](#iterator)
+  * [Separating the collection from the iterator](#separating-the-collection-from-the-iterator)
+  * [Iterable](#iterable)
+* [Iterable vs Iterator](#iterable-vs-iterator)
+* [For Loop](#for-loop)
+* [Python's Builtin iterable and iterator](#pythons-builtin-iterable-and-iterator)
+* [iter() Function](#iter---function)
+  * [Making the iterator to iterate over any Sequence](#making-the-iterator-to-iterate-over-any-sequence)
+<!-- TOC -->
+
 # Iterating Sequence
 
 1. When the sequence has the positional ordering, we cna iterate over that sequence using the index of the sequence.
