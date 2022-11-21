@@ -301,7 +301,56 @@ An iterator is an object that implement
 * if not then check fot getitem , it if it has , then for loop done via the sequence protocol.
 * if it does not have both iter and getitem then throw error.
 
+# Python's Builtin iterable and iterator
 
+| range(10)       | iterable |
+|-----------------|----------|
+| dict.keys()     | iterable |
+| dict.values()   | iterable |
+| dict.items()    | iterable |
+| enumerate(list) | iterator |
+| zip(a,b)        | iterator |
+| open(path)      | iterator |
+
+# iter() Function
+
+> what happen when python perform an iteration over an iterable?
+> 1. Python first call the `iter()` function on the object we want to iterate.
+> 2. if the object implement the `__iter__` method , that methods is called and python uses the return iterator.
+
+> what happen if object does not implement the `__iter__` method?
+> 1. **Is an exception raised immediately?** `NO`
+
+> How does iterating over a sequence type . that object only implemented `__getitem__`
+> 1. now python try call the __getitem__ and `return the iterator object`
+
+## Making the iterator to iterate over any Sequence
+
+```python
+class SeqIterator:
+    def __init__(self, seq):
+        self.seq = seq
+        self.index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        try:
+            item = self.seq[self.index]
+            self.index += 1
+            return item
+        except IndexError:
+            raise StopIteration
+```
+
+when we call the iter(obj)
+
+1. first look for `__iter__` method
+    1. Yes , return the iterator object
+    2. No , look for `__getitem__` method.
+        1. Yes, create an iterator from the sequence and return the iterator
+        2. NO , raise the TypeError
 
 
 
