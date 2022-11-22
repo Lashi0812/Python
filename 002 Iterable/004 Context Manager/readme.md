@@ -1,3 +1,22 @@
+<!-- TOC -->
+* [Context Manager](#context-manager)
+  * [Context Manager](#context-manager)
+    * [Context Manager protocol](#context-manager-protocol)
+    * [How Context Manager works](#how-context-manager-works)
+    * [Scope of  with block](#scope-of--with-block)
+    * [`__enter__` Method](#__enter__-method)
+    * [`__exit__` Method](#__exit__-method)
+      * [Scenario 1](#scenario-1)
+      * [Scenario 2](#scenario-2)
+* [Caveat with Lazy Iterator](#caveat-with-lazy-iterator)
+  * [Solution](#solution)
+* [Generator and Context Manager](#generator-and-context-manager)
+  * [Context Manager Pattern](#context-manager-pattern)
+  * [Mimic the Context Manager Using the Generator](#mimic-the-context-manager-using-the-generator)
+  * [Creating the context manager from the generator function](#creating-the-context-manager-from-the-generator-function)
+* [Decorating Generator Function](#decorating-generator-function)
+<!-- TOC -->
+
 # Context Manager
 
 > What is context?
