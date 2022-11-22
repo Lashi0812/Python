@@ -125,5 +125,146 @@ Return True or False
 * True --> Silence the error
 * False --> propagate the error
 
+# Caveat with Lazy Iterator
+
+```python
+def read_file():
+    with open("test.txt", "r") as file:
+        return file  # return lazy iterator
+
+
+reader = read_file()
+for row in reader:  # ValueError: I/O operation on closed file.
+    print(row) 
+```
+
+When we exit the with block the file is close , we are trying to access the file. it throws error.
+
+## Solution
+
+```python
+def read_file():
+    with open("test.txt", "r") as file:
+        yield from file  # yield lazy iterator
+
+
+reader = read_file()
+for row in reader:
+    print(row)
+    # print the row
+```
+
+Now there will no error ,since yield from don't close the file until we exhaust the file.
+
+# Generator and Context Manager
+
+## Context Manager Pattern
+
+```python
+with open("readme.md") as f:
+    print(f.readline())
+```
+
+1. create the context manager
+2. enter the context
+3. do the stuff within the context
+4. exit context
+
+## Mimic the Context Manager Using the Generator
+
+```python
+def open_file(file_name, mode):
+    # initialise
+    f = open(file_name, mode)
+    try:
+        # similar __enter__ function
+        yield f
+    finally:
+        # similar __exit__ function
+        f.close()
+
+
+# how to use this generator as the context manager
+cxt = open_file("readme.md", "r")
+f = next(cxt)  # open file and yield file
+# do the stuff with file
+next(cxt)  # close file
+```
+
+1. we can create the generator function
+2. call the generation function
+3. call the next on the generator which yield the opened file.
+4. call again the next of the generator which close the file.
+
+## Creating the context manager from the generator function
+
+```python
+class GenContexManager:
+    def __init__(self, gen_fn, *args, **kwargs):
+        self.gen = gen_fn(*args, **kwargs)
+
+    def __enter__(self):
+        return next(self.gen)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        next(self.gen)
+        return False
+
+
+with GenContexManager(open_file, file_name, mode) as file:
+    print(file.read())
+```
+
+1. we are calling the generator function inside the init of context manager ,which create the generator object.
+2. using with the GenContextManager we yield the object
+3. we perform the task with that object
+4. finally return exit the context manager
+5. but we lost readability of code. `with open` tell we are opening something.
+    1. but here `with GenContextManager` doesn't tell with what we are working.
+
+# Decorating Generator Function
+
+1. to fix readability issue we can decorator
+
+```python
+def context_manager_dec(gen_fn):
+    def inner(*args, **kwargs):
+        gen = gen_fn(*args, **kwargs)
+        return GenContextManager(gen)
+
+    return inner
+
+@context_manager_dec
+def open_file(file_name,mode):
+    try:
+        f = open(file_name,mode)
+    finally:
+        f.close()
+
+with open_file(file_name,mode) as file:
+    print(file.read())
+```
+Python implement these for us.
+1. we don't need to write the generator context manager class.
+2. we don't have to write the decorator
+3. all we have to use the `contextmanager` decorator
+```python
+from contextlib import contextmanager
+
+@contextmanager
+def open_file(file_name,mode):
+    try:
+        f = open(file_name,mode)
+        yield f
+    finally:
+        f.close()
+
+with open_file("readme.md","r") as f:
+    print(f.readlines())
+```
+
+
+
+
 
 
