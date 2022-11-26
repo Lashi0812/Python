@@ -1,3 +1,31 @@
+<!-- TOC -->
+* [Descriptor](#descriptor)
+  * [Why we need descriptor?](#why-we-need-descriptor)
+  * [Descriptor protocol](#descriptor-protocol)
+  * [Type of Descriptor](#type-of-descriptor)
+* [Getter and Setter](#getter-and-setter)
+  * [`__get__` method](#__get__-method)
+  * [`__set__` method](#__set__-method)
+  * [Caveat](#caveat)
+* [Storing the attribute](#storing-the-attribute)
+  * [Where to store the attribute value?](#where-to-store-the-attribute-value)
+    * [Instance Dictionary](#instance-dictionary)
+    * [Descriptor Dictionary](#descriptor-dictionary)
+* [Strong and weak reference](#strong-and-weak-reference)
+  * [Strong Reference](#strong-reference)
+  * [Weak reference](#weak-reference)
+* [Storing in descriptor Instance](#storing-in-descriptor-instance)
+* [`__set_name__` method](#__set_name__-method)
+  * [Better Error Message](#better-error-message)
+  * [same name as class attribute](#same-name-as-class-attribute)
+* [Descriptor Loop up Resolution](#descriptor-loop-up-resolution)
+  * [Bare Attribute](#bare-attribute)
+  * [Data Descriptor](#data-descriptor)
+  * [Non data descriptor](#non-data-descriptor)
+* [Function and Descriptor](#function-and-descriptor)
+<!-- TOC -->
+
+
 # Descriptor
 
 ## Why we need descriptor?
@@ -556,6 +584,57 @@ __get__ called
 
 this distinct between the data descriptor and non data descriptor, made us use the same name in instance dictionary as
 in the class dictionary .
+
+# Function and Descriptor
+
+1. When we call the function object from the class object python return the function object itself.
+2. When we call the same function object from **class instance** python the *bound method of that function.*
+
+```pycon
+>>> class Person:
+...     def __init__(self,name):
+...         self.name = name
+...     def say_hello(self):
+...         return f"{self.name} says hello"
+... 
+>>> Person.say_hello
+<function Person.say_hello at 0x0000019B85698EA0>
+>>> Person("Method").say_hello
+<bound method Person.say_hello of <__main__.Person object at 0x0000019B8531F610>>
+```
+
+**How python does this magic?**
+Function are nothing but the **Non data descriptor**
+
+```pycon
+>>> class FuncDescriptor:
+...    def __init__(self, fn):
+...       self._func = fn
+
+...    def __get__(self, instance, owner):
+...       if instance is None:
+...          return self._func
+...       return types.MethodType(self._func,instance)
+```
+
+We define the non data descriptor protocol for `FuncDescriptor`.
+
+```pycon
+>>> def hello(self):
+...     print(f"{self.name} says hello!")
+...
+>>> class Person:
+...     def __init__(self,name):
+...         self.name = name
+...     say_hello = FuncDescriptor(hello)
+...
+>>> Person.say_hello
+<function hello at 0x0000019B85658040>
+>>> Person("some").say_hello
+<bound method hello of <__main__.Person object at 0x0000019B8531F610>>
+```
+This how the python function make the bound to instance. 
+
 
 
 
