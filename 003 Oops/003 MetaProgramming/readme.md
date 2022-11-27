@@ -102,3 +102,31 @@ refer the notebook
    class Person(metaclass=Mytype):
        pass
    ```
+
+
+# `__prepare__` method
+```python
+class MyType(type):
+    def __new__(mcs,name,bases,cls_dict):
+        pass
+```
+1. msc - metaclass used to create class
+2. name - name of the class we are creating
+3. bases - classes we are inheriting from
+4. cls_dict - a dictionary use as class namespace
+
+**Where does cls_dict come from?**
+1. `__prepare__` static method which give the dict
+2. `type` implement this method and return the empty dict
+
+**__prepare method**
+1. `type implement` the default behaviour of __prepare__ method
+2. it is static method
+3. the additional parameter we pass through the class definition,they also passed to dict
+4. Python call the `__prepare__` method before it calls `__new__` method.
+5. the return value of `__prepare__` must be a `mapping type`
+6. Python manipulate the dict a bit
+7. then call `__new__` method passing teh return value as the `class dictionary` argument.
+
+
+
